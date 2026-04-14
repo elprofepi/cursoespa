@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Relámpago de Español</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bubble-pink: #FF85A1;
+            --bubble-blue: #7BD3EA;
+            --bubble-yellow: #F9F07A;
+            --bubble-green: #B1E5B4;
+            --bg-soft: #FFF9F0;
+        }
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg-soft);
+            color: #444;
+            overflow-x: hidden;
+        }
+        .bouncy {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .card-pop {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 30px;
+        }
+        .card-pop:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .fun-shadow {
+            box-shadow: 0 8px 0px rgba(0,0,0,0.05);
+        }
+        .hidden { display: none; }
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- Header Mágico -->
+    <header class="p-6 text-center relative overflow-hidden">
+        <div class="inline-block bg-white px-8 py-4 rounded-full shadow-xl border-4 border-yellow-300 relative z-10">
+            <h1 class="text-3xl md:text-4xl font-black text-pink-500 tracking-tight">
+                ⚡ CURSO RELÁMPAGO DE ESPAÑOL ⚡
+            </h1>
+            <p class="text-blue-400 font-bold text-sm uppercase tracking-widest mt-1">¡Aprende jugando! (玩耍中学习)</p>
+        </div>
+        <div class="absolute top-0 left-10 text-4xl opacity-20 bouncy">☁️</div>
+        <div class="absolute top-10 right-10 text-4xl opacity-20 bouncy" style="animation-delay: 1s">🌈</div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="max-w-4xl mx-auto px-4 mb-8 flex justify-center gap-4">
+        <div class="bg-white px-6 py-2 rounded-full border-4 border-pink-200 shadow-sm flex items-center gap-2">
+            <span class="text-2xl">⭐</span>
+            <span id="stars" class="text-2xl font-bold text-pink-500">0</span>
+        </div>
+        <div class="bg-white px-6 py-2 rounded-full border-4 border-blue-200 shadow-sm flex items-center gap-2">
+            <span class="text-2xl">🏆</span>
+            <span id="rank" class="text-lg font-bold text-blue-500 uppercase">Novata</span>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-4">
+        
+        <!-- Menú de Iconos Gigantes -->
+        <nav class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <button onclick="showSection('learn')" class="bg-blue-400 text-white p-6 card-pop fun-shadow">
+                <div class="text-5xl mb-2">🖼️</div>
+                <div class="text-xl font-bold">Aprender</div>
+                <div class="text-xs opacity-70">词汇</div>
+            </button>
+            <button onclick="showSection('write')" class="bg-pink-400 text-white p-6 card-pop fun-shadow">
+                <div class="text-5xl mb-2">🖍️</div>
+                <div class="text-xl font-bold">Escribir</div>
+                <div class="text-xs opacity-70">写作</div>
+            </button>
+            <button onclick="showSection('play')" class="bg-yellow-400 text-white p-6 card-pop fun-shadow">
+                <div class="text-5xl mb-2">🎯</div>
+                <div class="text-xl font-bold">Jugar</div>
+                <div class="text-xs opacity-70">游戏</div>
+            </button>
+            <button onclick="showSection('phrases')" class="bg-green-400 text-white p-6 card-pop fun-shadow">
+                <div class="text-5xl mb-2">💬</div>
+                <div class="text-xl font-bold">Hablar</div>
+                <div class="text-xs opacity-70">对话</div>
+            </button>
+        </nav>
+
+        <!-- SECCIÓN: APRENDER -->
+        <section id="sec-learn" class="section-content">
+            <div class="flex gap-2 mb-8 overflow-x-auto py-2 no-scrollbar">
+                <button onclick="filterVocab('all')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-blue-400 hover:text-blue-500 transition shrink-0">Todo</button>
+                <button onclick="filterVocab('cuerpo')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-red-400 hover:text-red-500 transition shrink-0">Cuerpo 👤</button>
+                <button onclick="filterVocab('animales')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-orange-400 hover:text-orange-500 transition shrink-0">Animales 🐶</button>
+                <button onclick="filterVocab('comida')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-green-400 hover:text-green-500 transition shrink-0">Comida 🍎</button>
+                <button onclick="filterVocab('clima')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-yellow-400 hover:text-yellow-500 transition shrink-0">Clima ☁️</button>
+                <button onclick="filterVocab('casa')" class="bg-white border-4 border-gray-100 px-6 py-2 rounded-full font-bold text-gray-500 hover:border-purple-400 hover:text-purple-500 transition shrink-0">Casa 🏠</button>
+            </div>
+            <div id="vocab-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+        </section>
+
+        <!-- SECCIÓN: ESCRIBIR -->
+        <section id="sec-write" class="section-content hidden">
+            <div class="max-w-md mx-auto bg-white p-10 rounded-[40px] shadow-2xl border-b-[12px] border-pink-200">
+                <div id="write-quest" class="text-center">
+                    <div id="write-emoji" class="text-[100px] mb-4 bouncy">?</div>
+                    <div id="write-hint" class="text-2xl font-bold text-gray-300 tracking-[0.3em] mb-8 uppercase">---</div>
+                    <input type="text" id="write-input" autocomplete="off" 
+                        class="w-full p-5 text-3xl font-bold text-center border-4 border-pink-100 rounded-2xl outline-none focus:border-pink-400 text-pink-600 uppercase mb-6"
+                        placeholder="...">
+                    <button onclick="checkWriting()" class="w-full bg-pink-500 text-white text-2xl font-bold py-5 rounded-2xl shadow-lg hover:bg-pink-600 active:scale-95 transition">¡LISTO! ✅</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: JUGAR -->
+        <section id="sec-play" class="section-content hidden">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold text-yellow-600">¿Cuál es...?</h3>
+                <p id="game-target" class="text-5xl font-black text-gray-800 uppercase mt-2">---</p>
+            </div>
+            <div id="game-options" class="grid grid-cols-2 gap-6 max-w-2xl mx-auto"></div>
+        </section>
+
+        <!-- SECCIÓN: FRASES -->
+        <section id="sec-phrases" class="section-content hidden">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-green-600">Frases para hablar (说西班牙语)</h3>
+                <p class="text-gray-400 mb-4">Escoge una categoría:</p>
+                <div class="flex gap-2 justify-center mb-8">
+                    <button onclick="renderPhrases('general')" class="bg-white border-2 border-green-200 px-6 py-2 rounded-full font-bold text-green-600 hover:bg-green-50 transition">General 👋</button>
+                    <button onclick="renderPhrases('escuela')" class="bg-white border-2 border-blue-200 px-6 py-2 rounded-full font-bold text-blue-600 hover:bg-blue-50 transition">En el Cole 🏫</button>
+                </div>
+            </div>
+            <div id="phrases-list" class="grid gap-4 max-w-2xl mx-auto"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const database = [
+            // Cuerpo
+            { es: "Cabeza", zh: "头", emoji: "👤", cat: "cuerpo" },
+            { es: "Ojo", zh: "眼睛", emoji: "👁️", cat: "cuerpo" },
+            { es: "Mano", zh: "手", emoji: "🤚", cat: "cuerpo" },
+            { es: "Pie", zh: "脚", emoji: "🦶", cat: "cuerpo" },
+            { es: "Boca", zh: "嘴", emoji: "👄", cat: "cuerpo" },
+            { es: "Nariz", zh: "鼻子", emoji: "👃", cat: "cuerpo" },
+            { es: "Oreja", zh: "耳朵", emoji: "👂", cat: "cuerpo" },
+            { es: "Pelo", zh: "头发", emoji: "💇", cat: "cuerpo" },
+            // Animales
+            { es: "Gato", zh: "猫", emoji: "🐱", cat: "animales" },
+            { es: "Perro", zh: "狗", emoji: "🐶", cat: "animales" },
+            { es: "Conejo", zh: "兔子", emoji: "🐰", cat: "animales" },
+            { es: "León", zh: "狮子", emoji: "🦁", cat: "animales" },
+            { es: "Pájaro", zh: "鸟", emoji: "🐦", cat: "animales" },
+            { es: "Pez", zh: "鱼", emoji: "🐟", cat: "animales" },
+            { es: "Elefante", zh: "大象", emoji: "🐘", cat: "animales" },
+            { es: "Mono", zh: "猴子", emoji: "🐒", cat: "animales" },
+            { es: "Vaca", zh: "牛", emoji: "🐮", cat: "animales" },
+            { es: "Oveja", zh: "羊", emoji: "🐑", cat: "animales" },
+            { es: "Cerdo", zh: "猪", emoji: "🐷", cat: "animales" },
+            { es: "Rana", zh: "青蛙", emoji: "🐸", cat: "animales" },
+            // Comida
+            { es: "Manzana", zh: "苹果", emoji: "🍎", cat: "comida" },
+            { es: "Plátano", zh: "香蕉", emoji: "🍌", cat: "comida" },
+            { es: "Uva", zh: "葡萄", emoji: "🍇", cat: "comida" },
+            { es: "Huevo", zh: "蛋", emoji: "🥚", cat: "comida" },
+            { es: "Leche", zh: "牛奶", emoji: "🥛", cat: "comida" },
+            { es: "Agua", zh: "水", emoji: "💧", cat: "comida" },
+            { es: "Arroz", zh: "米饭", emoji: "🍚", cat: "comida" },
+            { es: "Pan", zh: "面包", emoji: "🍞", cat: "comida" },
+            { es: "Queso", zh: "奶酪", emoji: "🧀", cat: "comida" },
+            { es: "Pizza", zh: "披萨", emoji: "🍕", cat: "comida" },
+            // Clima
+            { es: "Sol", zh: "太阳", emoji: "☀️", cat: "clima" },
+            { es: "Luna", zh: "月亮", emoji: "🌙", cat: "clima" },
+            { es: "Nube", zh: "云", emoji: "☁️", cat: "clima" },
+            { es: "Lluvia", zh: "雨", emoji: "🌧️", cat: "clima" },
+            { es: "Nieve", zh: "雪", emoji: "❄️", cat: "clima" },
+            { es: "Arcoíris", zh: "彩虹", emoji: "🌈", cat: "clima" },
+            // Casa
+            { es: "Cama", zh: "床", emoji: "🛏️", cat: "casa" },
+            { es: "Silla", zh: "椅子", emoji: "🪑", cat: "casa" },
+            { es: "Mesa", zh: "桌子", emoji: "🏷️", cat: "casa" },
+            { es: "Ventana", zh: "窗户", emoji: "🪟", cat: "casa" },
+            { es: "Puerta", zh: "门", emoji: "🚪", cat: "casa" },
+            { es: "Llave", zh: "钥匙", emoji: "🔑", cat: "casa" },
+            { es: "Baño", zh: "洗手间", emoji: "🚽", cat: "casa" },
+            { es: "Cocina", zh: "厨房", emoji: "🍳", cat: "casa" },
+            { es: "Televisión", zh: "电视", emoji: "📺", cat: "casa" },
+            { es: "Lámpara", zh: "灯", emoji: "💡", cat: "casa" }
+        ];
+
+        const phrases = {
+            general: [
+                { es: "Hola, ¿qué tal?", zh: "你好，怎么样？", emo: "👋" },
+                { es: "Muchas gracias", zh: "非常感谢", emo: "🙏" },
+                { es: "Tengo mucha hambre", zh: "我很饿", emo: "😋" },
+                { es: "¡Me gusta mucho!", zh: "我非常喜欢！", emo: "❤️" },
+                { es: "Estoy muy feliz", zh: "我很高兴", emo: "🌟" },
+                { es: "Tengo sed", zh: "我渴了", emo: "🥤" },
+                { es: "Tengo sueño", zh: "我困了", emo: "💤" },
+                { es: "Buenas noches", zh: "晚安", emo: "🌙" }
+            ],
+            escuela: [
+                { es: "¿Puedo ir al baño?", zh: "我可以去洗手间吗？", emo: "🚽" },
+                { es: "No tengo el libro", zh: "我没有书", emo: "📖" },
+                { es: "¿En qué página estamos?", zh: "我们在哪一页？", emo: "📄" },
+                { es: "¿Puedes repetir, por favor?", zh: "请再说一遍好吗？", emo: "🔁" },
+                { es: "¿Me prestas un lápiz?", zh: "你能借我一支铅笔吗？", emo: "✏️" },
+                { es: "He terminado mi tarea", zh: "我写完作业了", emo: "✅" },
+                { es: "Tengo una pregunta", zh: "我有一个问题", emo: "❓" },
+                { es: "¿Cómo se escribe esto?", zh: "这个怎么写？", emo: "✍️" }
+            ]
+        };
+
+        let state = {
+            stars: parseInt(localStorage.getItem('stars_relampago')) || 0,
+            currentWrite: null,
+            currentPlay: null
+        };
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'es-ES';
+            msg.rate = 0.9;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+            document.getElementById('sec-' + id).classList.remove('hidden');
+            if(id === 'learn') renderVocab('all');
+            if(id === 'write') setupWrite();
+            if(id === 'play') setupPlay();
+            if(id === 'phrases') renderPhrases('general');
+        }
+
+        function renderVocab(cat) {
+            const grid = document.getElementById('vocab-grid');
+            grid.innerHTML = '';
+            const items = cat === 'all' ? database : database.filter(i => i.cat === cat);
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-6 card-pop shadow-sm border-2 border-gray-50 flex flex-col items-center cursor-pointer";
+                div.onclick = () => { speak(item.es); animateScale(div); };
+                div.innerHTML = `
+                    <span class="text-5xl mb-3">${item.emoji}</span>
+                    <span class="font-bold text-gray-700 text-lg">${item.es}</span>
+                    <span class="text-xs text-gray-400 font-semibold">${item.zh}</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function filterVocab(cat) { renderVocab(cat); }
+
+        function setupWrite() {
+            state.currentWrite = database[Math.floor(Math.random() * database.length)];
+            document.getElementById('write-emoji').innerText = state.currentWrite.emoji;
+            const word = state.currentWrite.es;
+            document.getElementById('write-hint').innerText = word[0] + word.slice(1).replace(/./g, ' _');
+            document.getElementById('write-input').value = "";
+            speak(state.currentWrite.es);
+        }
+
+        function checkWriting() {
+            const val = document.getElementById('write-input').value.trim().toLowerCase();
+            if(val === state.currentWrite.es.toLowerCase()) {
+                celebrate();
+                addStars(10);
+                setTimeout(setupWrite, 2000);
+            } else {
+                speak("Inténtalo de nuevo");
+            }
+        }
+
+        function setupPlay() {
+            const options = document.getElementById('game-options');
+            options.innerHTML = "";
+            const shuffled = [...database].sort(() => 0.5 - Math.random()).slice(0, 4);
+            state.currentPlay = shuffled[Math.floor(Math.random() * shuffled.length)];
+            document.getElementById('game-target').innerText = state.currentPlay.es;
+            shuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white p-8 rounded-[35px] text-7xl shadow-md border-4 border-transparent hover:border-yellow-400 transition-all card-pop";
+                btn.innerHTML = item.emoji;
+                btn.onclick = () => {
+                    if(item.es === state.currentPlay.es) {
+                        celebrate();
+                        addStars(5);
+                        setTimeout(setupPlay, 1500);
+                    }
+                };
+                options.appendChild(btn);
+            });
+        }
+
+        function renderPhrases(category) {
+            const list = document.getElementById('phrases-list');
+            list.innerHTML = "";
+            const currentPhrases = phrases[category];
+            currentPhrases.forEach(p => {
+                const div = document.createElement('div');
+                const borderColor = category === 'escuela' ? 'border-blue-400' : 'border-green-400';
+                div.className = `bg-white p-5 rounded-3xl shadow-sm border-l-[10px] ${borderColor} flex items-center justify-between cursor-pointer hover:bg-gray-50 transition`;
+                div.onclick = () => speak(p.es);
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">${p.emo}</span>
+                        <div>
+                            <p class="font-bold text-gray-700 text-lg">${p.es}</p>
+                            <p class="text-sm text-gray-400 font-medium">${p.zh}</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-full">🔊</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addStars(n) {
+            state.stars += n;
+            localStorage.setItem('stars_relampago', state.stars);
+            document.getElementById('stars').innerText = state.stars;
+            updateRank();
+        }
+
+        function updateRank() {
+            const rank = document.getElementById('rank');
+            if(state.stars < 50) rank.innerText = "Novata";
+            else if(state.stars < 150) rank.innerText = "Aprendiz";
+            else rank.innerText = "Maestra 👑";
+        }
+
+        function celebrate() {
+            for(let i=0; i<20; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                c.style.top = '-10px';
+                document.body.appendChild(c);
+                c.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(100vh)', opacity: 0 }], { duration: 2000 }).onfinish = () => c.remove();
+            }
+        }
+
+        function animateScale(el) {
+            el.classList.add('scale-90');
+            setTimeout(() => el.classList.remove('scale-90'), 100);
+        }
+
+        window.onload = () => {
+            document.getElementById('stars').innerText = state.stars;
+            updateRank();
+            showSection('learn');
+        };
+    </script>
+</body>
+</html>
